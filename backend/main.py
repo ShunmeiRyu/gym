@@ -7,6 +7,9 @@ from configs.app_config import app_settings
 from providers import db_provider
 from providers import loguru_provider
 
+from api.user.endpionts import auth_router
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await loguru_provider.register()
@@ -27,6 +30,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router)
 
 if __name__ == "__main__":
     from uvicorn import run

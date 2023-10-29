@@ -31,7 +31,7 @@ axios.interceptors.response.use(
   }
 );
 
-export function $get(url) {
+export function get(url) {
   return new Promise((resolve, reject) => {
     axios
       .get(url)
@@ -44,7 +44,7 @@ export function $get(url) {
   });
 }
 
-export function $post(url, data) {
+export function post(url, data) {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(
       (response) => {
@@ -61,7 +61,7 @@ export function $post(url, data) {
   });
 }
 
-export function $put(url, data = {}) {
+export function put(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.put(url, data).then(
       (response) => {
@@ -74,15 +74,3 @@ export function $put(url, data = {}) {
   });
 }
 
-export function $delete(url, data = {}) {
-  return new Promise((resolve, reject) => {
-    axios.delete(url, data).then(
-      (response) => {
-        resolve([response.status, response.data]);
-      },
-      (error) => {
-        reject([error.response.status, error.response.data]);
-      }
-    );
-  });
-}

@@ -32,8 +32,9 @@ CREATE TYPE STAFFS_STATUS AS ENUM (
 );
 
 CREATE TYPE USERS_STATUS AS ENUM (
-  '0', -- 新规
-  '1', -- 常规
+  '0', -- 未认证
+  '1', -- 新规
+  '2', -- 常规
   '8', -- 停用
   '9'  -- 禁用
 );
@@ -214,10 +215,21 @@ CREATE TABLE access_tokens (
 );
 CREATE TRIGGER update_access_tokens_at BEFORE UPDATE ON access_tokens FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
 
+CREATE TABLE verify_codes (
+  id uuid NOT NULL,
+  userid uuid NOT NULL,
+  verify_code varchar(6) NOT NULL,
+  is_valid bool NOT NULL DEFAULT True,
+  create_up timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updata_up timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+CREATE TRIGGER update_verify_codes_at BEFORE UPDATE ON verify_codes FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
+
+
 --ユーザー情報
 CREATE TABLE user_infos (
     user_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    sub uuid NOT NULL,
     last_name_kanji varchar(255) NOT NULL,
     last_name_kana varchar(255) NOT NULL,
     first_name_kanji varchar(255) NOT NULL,
@@ -245,7 +257,6 @@ CREATE TRIGGER update_user_info_at BEFORE UPDATE ON user_infos FOR EACH ROW EXEC
 --ユーザー
 CREATE TABLE users (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
-    sub varchar(255),
     email varchar(255) NOT NULL,
     hashed_pwd varchar(255),
     status USERS_STATUS NOT NULL,
@@ -266,3 +277,4 @@ ALTER TABLE staffs ADD CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES 
 ALTER TABLE stores ADD CONSTRAINT fk_admin_id FOREIGN KEY (admin_id) REFERENCES admins (id);
 ALTER TABLE user_infos ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id);
 ALTER TABLE access_tokens ADD CONSTRAINT fk_userid FOREIGN KEY (userid) REFERENCES users (id);
+ALTER TABLE verify_codes ADD CONSTRAINT fk_userid FOREIGN KEY (userid) REFERENCES users (id);

@@ -66,7 +66,7 @@ export default function ForgotPassword() {
           variant="contained"
           loading={isSubmitting}
         >
-          Create account
+          Send email
         </LoadingButton>
 
         <Link

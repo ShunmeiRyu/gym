@@ -99,7 +99,7 @@ export default function Login() {
         />
         <Link
           component={RouterLink}
-          href={Paths.register}
+          href={Paths.forgot_password}
           variant="body2"
           color="inherit"
           underline="always"
@@ -117,20 +117,6 @@ export default function Login() {
           loading={isSubmitting}
         >
           Login
-        </LoadingButton>
-        <Divider>or</Divider>
-        <LoadingButton
-          fullWidth
-          color="info"
-          size="large"
-          startIcon={<Iconify icon="devicon:google" />}
-          // type="submit"
-          variant="outlined"
-          loading={isSubmitting}
-        >
-          <Typography variant="buttun" color={theme.palette.common.black}>
-            Goole Login
-          </Typography>
         </LoadingButton>
       </Stack>
     </FormProvider>

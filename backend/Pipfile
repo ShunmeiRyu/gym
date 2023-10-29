@@ -9,6 +9,8 @@ uvicorn = {extras = ["standard"], version = "*"}
 pydantic-settings = "==2.0.3"
 asyncpg = "==0.28.0"
 loguru = "==0.7.2"
+passlib = "*"
+bcrypt = "*"
 
 [dev-packages]
 

@@ -1,4 +1,5 @@
 export const ApiEndpoint = {
     token: "/token",
-    refresh: "/refresh"
+    refresh: "/refresh",
+    register: "/user"
 }
