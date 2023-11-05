@@ -10,10 +10,17 @@ from utils import verify_code
 from .schemas import NewUser
 from .schemas import VerifyData
 
+from securities.pwd import verify_password
+from securities import jwt as Jwt
+
 from .crud import query_user_with_email
 from .crud import insert_new_user
 from .crud import insert_verify_code
 from .crud import query_verify_code_created_at
+from .crud import query_user_info_for_pwd_auth
+from .crud import query_access_token
+from .crud import updata_access_token
+from .crud import inster_access_token
 
 auth_router = APIRouter()
 
@@ -90,4 +97,49 @@ async def verify_email(verify_data: VerifyData, db: DB = Depends(get_session)):
             content={
                 "message": "An unknown exception occurred, please try again later."
             },
+        )
+
+
+
+@auth_router.post("/login")
+async def auth_with_pwd(auth_user: NewUser, db: DB = Depends(get_session)):
+    try:
+        db_user = await query_user_info_for_pwd_auth(
+            db, email=auth_user.email
+        )
+        if not db_user:
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST, content={
+                    "message": "email is not exit"}
+            )
+        if not verify_password(auth_user.plan_pwd, db_user["hashed_pwd"]):
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST, content={
+                    "message": "password is invalid"}
+            )
+        access_token = Jwt.gen_access_token(
+            {k: v for k, v in db_user.items() if k != 'hashed_pwd'}
+        )
+        refresh_token = Jwt.gen_refresh_token(
+            {k: v for k, v in db_user.items() if k == 'id'}, access_token
+        )
+
+        user_access_token = await query_access_token(
+            db, id=db_user["id"]
+        )
+        if user_access_token:
+            await updata_access_token(db, id=db_user["id"])
+        await inster_access_token(
+            db, id=db_user["id"], access_token=access_token)
+
+        return JSONResponse(
+            status_code=status.HTTP_200_OK, content={
+                "access_token": access_token, "refresh_token": refresh_token}
+        )
+    except Exception as e:
+        logger.exception(e)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={
+                "message": "An unknown exception occurred, please try again later."}
         )
