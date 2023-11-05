@@ -11,3 +11,6 @@ class AuthUser(BasicUser):
 
 class VerifyData(BasicUser):
     code: str = Field(max_length=6, min_length=6)
+
+class PasswordVerify(VerifyData):
+    password: str = Field(..., min_length=8, max_length=16)

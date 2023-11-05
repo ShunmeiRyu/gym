@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+
 // three
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 // @mui
+
 import Link from "@mui/material/Link";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
@@ -42,7 +44,6 @@ export default function VerifyEmail() {
 
   const {
     reset,
-    handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
@@ -53,6 +54,17 @@ export default function VerifyEmail() {
     });
     if (status === 200) {
       navigate(Paths.login);
+    } else {
+      setErrorMsg(data.message);
+    }
+  };
+  const handleResendCode = async (form_data) => {
+    const [status, data] = await post(ApiEndpoint.register_resend_code, {
+      email: params.get("email"),
+    });
+    if (status === 200) {
+      console.log(111,form_data)
+      navigate(`${Paths.verify_email}?email=${params.get("email")}`);
     } else {
       setErrorMsg(data.message);
     }
@@ -89,7 +101,7 @@ export default function VerifyEmail() {
           {`Don’t have a code? `}
           <Link
             variant="subtitle2"
-            // onClick={handleResendCode}
+            onClick={handleResendCode}
             sx={{
               cursor: "pointer",
               ...(counting && {

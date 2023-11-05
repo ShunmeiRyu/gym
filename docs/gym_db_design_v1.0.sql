@@ -257,7 +257,7 @@ CREATE TRIGGER update_user_info_at BEFORE UPDATE ON user_infos FOR EACH ROW EXEC
 CREATE TABLE users (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     email varchar(255) NOT NULL,
-    hashed_pwd varchar(255),
+    hashed_pwd varchar(255) NOT NULL,
     status USERS_STATUS NOT NULL,
     created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

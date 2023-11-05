@@ -45,13 +45,14 @@ export function post(url, data) {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(
       (response) => {
-        console.log(response.data)
+        console.log(response.data);
         if (url === ApiEndpoint.token) {
           localStorage.setItem("access_token", response.data.access_token);
         }
         resolve([response.status, response.data]);
       },
       (error) => {
+        console.log(error);
         reject([error.response.status, error.response.data]);
       }
     );
@@ -70,4 +71,3 @@ export function put(url, data = {}) {
     );
   });
 }
-

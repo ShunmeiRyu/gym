@@ -66,3 +66,21 @@ async def inster_access_token(
             VALUES('{user_id}','{access_token}');
     '''
     await db.execute(sql)
+
+
+async def update_user_pwd(db: DB, /, email: str, hashed_pwd: str
+) -> None:
+    sql = f'''
+        UPDATE users SET hashed_pwd='{hashed_pwd}'
+            WHERE users.email='{email}';
+    '''
+    await db.execute(sql)
+
+async def update_user_status(db: DB, /, email: str, ) -> None:
+    sql = f'''
+        UPDATE users SET status='{UserStatus.new.value}'
+            WHERE users.email='{email}';
+    '''
+    await db.execute(sql)
+
+    

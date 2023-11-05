@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 // three
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -21,9 +22,13 @@ import { useBoolean } from "src/hooks/use-boolean";
 import { useCountdownSeconds } from "src/hooks/use-countdown";
 // routers
 import { Paths } from "src/routers/paths";
+// api
+import { ApiEndpoint } from "src/api/api-endpoint";
+import { post } from "src/api/http";
 
 export default function NewPassword() {
-  const theme = useTheme();
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const password = useBoolean();
   const confirm_password = useBoolean();
@@ -47,14 +52,31 @@ export default function NewPassword() {
 
   const {
     reset,
-    handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-    } catch (error) {}
-  });
+  const onSubmit = async (form_data) => {
+    const [status, data] = await post(ApiEndpoint.password_verify_email, {
+      email: params.get("email"),
+      code: form_data.code,
+      password: form_data.password,
+    });
+    if (status === 200) {
+      navigate("/");
+    } else {
+      setErrorMsg(data.message);
+    }
+  };
+  const handleResendCode = async (form_data) => {
+    const [status, data] = await post(ApiEndpoint.forgot_password, {
+      email: params.get("email"),
+    });
+    if (status === 200) {
+      navigate(`${Paths.new_password}?email=${params.get("email")}`);
+    } else {
+      setErrorMsg(data.message);
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -133,7 +155,7 @@ export default function NewPassword() {
           {`Don’t have a code? `}
           <Link
             variant="subtitle2"
-            // onClick={handleResendCode}
+            onClick={handleResendCode}
             sx={{
               cursor: "pointer",
               ...(counting && {

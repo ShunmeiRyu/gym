@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // three
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -15,8 +16,12 @@ import Iconify from "src/components/iconify/iconify";
 import FormProvider, { RHFTextField } from "src/components/hook-form";
 // routers
 import { Paths } from "src/routers/paths";
+// api
+import { ApiEndpoint } from "src/api/api-endpoint";
+import { post } from "src/api/http";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string()
@@ -33,14 +38,20 @@ export default function ForgotPassword() {
 
   const {
     reset,
-    handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-    } catch (error) {}
-  });
+  const onSubmit = async (form_data) => {
+    const [status, data] = await post(ApiEndpoint.forgot_password, {
+      email: form_data.email
+    });
+    if (status === 200) {
+      navigate(`${Paths.new_password}?email=${form_data.email}`);
+    } else {
+      console.log(data)
+      setErrorMsg(data.message);
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
