@@ -15,19 +15,16 @@ axios.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);
+    return error;
   }
 );
 
 axios.interceptors.response.use(
   (response) => {
-    if (response.data.status === 403) {
-      window.location.href(`${Paths.login}?flag=true`);
-    }
     return response;
   },
   (error) => {
-    return Promise.reject(error);
+    return error;
   }
 );
 
@@ -48,9 +45,9 @@ export function post(url, data) {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(
       (response) => {
-        if (url === ApiEndpoint.token || url === ApiEndpoint.refresh) {
+        console.log(response.data)
+        if (url === ApiEndpoint.token) {
           localStorage.setItem("access_token", response.data.access_token);
-          localStorage.setItem("refresh_token", response.data.refresh_token);
         }
         resolve([response.status, response.data]);
       },

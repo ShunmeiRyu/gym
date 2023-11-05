@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // three
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -21,11 +22,13 @@ import FormProvider, { RHFTextField } from "src/components/hook-form";
 import { useBoolean } from "src/hooks/use-boolean";
 // routers
 import { Paths } from "src/routers/paths";
-
+// api
+import { ApiEndpoint } from "src/api/api-endpoint";
+import { post } from "src/api/http";
 
 
 export default function Login() {
-  const theme = useTheme();
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const password = useBoolean();
   const LoginSchema = Yup.object().shape({
@@ -49,10 +52,17 @@ export default function Login() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-    } catch (error) {}
-  });
+  const onSubmit = async (form_data) => {
+    const [status, data] = await post(ApiEndpoint.token, {
+      email: form_data.email,
+      password: form_data.password,
+    });
+    if (status === 200) {
+      navigate("/");
+    } else {
+      setErrorMsg(data.message);
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

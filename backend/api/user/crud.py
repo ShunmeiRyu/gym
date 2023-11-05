@@ -10,7 +10,8 @@ async def query_user_with_email(
 ) -> Optional[dict]:
     sql = f"""
     SELECT
-        id
+        id,
+        hashed_pwd
     FROM
         users
     WHERE
@@ -55,3 +56,13 @@ async def query_verify_code_created_at(db: DB, /, user_id: str, verify_code: str
     """
 
     return await db.fetch_value(sql)
+
+
+async def inster_access_token(
+        db: DB, /, user_id: str, access_token: str
+) -> None:
+    sql = f'''
+        INSERT INTO access_tokens(user_id,access_token)
+            VALUES('{user_id}','{access_token}');
+    '''
+    await db.execute(sql)
