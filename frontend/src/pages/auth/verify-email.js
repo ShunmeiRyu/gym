@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 // three
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -17,14 +18,19 @@ import FormProvider, { RHFCode } from "src/components/hook-form";
 import { useCountdownSeconds } from "src/hooks/use-countdown";
 // routers
 import { Paths } from "src/routers/paths";
+// api
+import { ApiEndpoint } from "src/api/api-endpoint";
+import { post } from "src/api/http";
 
 export default function VerifyEmail() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const { countdown, counting, startCountdown } = useCountdownSeconds(60);
   const VerifyEmailSchema = Yup.object().shape({
     code: Yup.string()
       .required("Code is required")
-      .length("Code must be length 6"),
+      .length(6, "Code must be length 6"),
   });
   const defaultValues = {
     code: "",
@@ -40,19 +46,26 @@ export default function VerifyEmail() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-    } catch (error) {}
-  });
+  const onSubmit = async (form_data) => {
+    const [status, data] = await post(ApiEndpoint.verify_email, {
+      email: params.get("email"),
+      code: form_data.code,
+    });
+    if (status === 200) {
+      navigate(Paths.login);
+    } else {
+      setErrorMsg(data.message);
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={1} sx={{ my: 5 }}>
         <Typography variant="h3">Please check your email!</Typography>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
-          box to verify your email.
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          We have emailed a 6-digit confirmation code to acb@domain, please
+          enter the code in below box to verify your email.
         </Typography>
       </Stack>
 

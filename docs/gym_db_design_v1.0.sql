@@ -205,23 +205,22 @@ CREATE TRIGGER update_stores_at BEFORE UPDATE ON stores FOR EACH ROW EXECUTE PRO
 
 
 CREATE TABLE access_tokens (
-  id uuid NOT NULL,
-  userid uuid NOT NULL,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
   access_token varchar(512) NOT NULL,
-  is_valid bool NOT NULL DEFAULT True,
-  create_up timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updata_up timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 CREATE TRIGGER update_access_tokens_at BEFORE UPDATE ON access_tokens FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
 
 CREATE TABLE verify_codes (
-  id uuid NOT NULL,
-  userid uuid NOT NULL,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
   verify_code varchar(6) NOT NULL,
   is_valid bool NOT NULL DEFAULT True,
-  create_up timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updata_up timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 CREATE TRIGGER update_verify_codes_at BEFORE UPDATE ON verify_codes FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -276,5 +275,5 @@ ALTER TABLE schedule ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES 
 ALTER TABLE staffs ADD CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES stores (id);
 ALTER TABLE stores ADD CONSTRAINT fk_admin_id FOREIGN KEY (admin_id) REFERENCES admins (id);
 ALTER TABLE user_infos ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id);
-ALTER TABLE access_tokens ADD CONSTRAINT fk_userid FOREIGN KEY (userid) REFERENCES users (id);
-ALTER TABLE verify_codes ADD CONSTRAINT fk_userid FOREIGN KEY (userid) REFERENCES users (id);
+ALTER TABLE access_tokens ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE verify_codes ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id);

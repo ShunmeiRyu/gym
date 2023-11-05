@@ -6,4 +6,8 @@ class BasicUser(BaseModel):
 
 
 class NewUser(BasicUser):
-    plan_pwd: str = Field(...,min_length=8, max_length=16, validation_alias="password")
+    plan_pwd: str = Field(..., min_length=8, max_length=16, validation_alias="password")
+
+
+class VerifyData(BasicUser):
+    code: str = Field(max_length=6, min_length=6)

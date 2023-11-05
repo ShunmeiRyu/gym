@@ -1,5 +1,6 @@
 export const ApiEndpoint = {
     token: "/token",
     refresh: "/refresh",
-    register: "/user"
+    register: "/user",
+    verify_email: "/verify_email"
 }

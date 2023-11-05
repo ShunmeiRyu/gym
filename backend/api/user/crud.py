@@ -28,5 +28,30 @@ async def insert_new_user(
     sql = f"""
     INSERT INTO USERS (email, hashed_pwd, status)
     VALUES ('{email}', '{hashed_pwd}', '{UserStatus.unverify.value}')
+    RETURNING id
     """
+    return await db.fetch_one(sql)
+
+
+async def insert_verify_code(db: DB, /, user_id: str, verify_code: str):
+    sql = f"""
+    INSERT INTO VERIFY_CODES (user_id, verify_code)
+    VALUES ('{user_id}', '{verify_code}')
+    """
+
     await db.execute(sql)
+
+
+async def query_verify_code_created_at(db: DB, /, user_id: str, verify_code: str):
+    sql = f"""
+    SELECT
+        created_at
+    FROM
+        VERIFY_CODES
+    WHERE
+        user_id = '{user_id}'
+        AND
+        verify_code = '{verify_code}';
+    """
+
+    return await db.fetch_value(sql)
