@@ -86,8 +86,8 @@ CREATE TABLE coach_store_relationship (
     coach_id uuid NOT NULL,
     store_id uuid NOT NULL,
     status RELATIONSHIP_STATUS NOT NULL,
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (coach_id, store_id)
 );
 CREATE TRIGGER update_coach_store_relationship_updated_at BEFORE UPDATE ON coach_store_relationship FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -111,7 +111,7 @@ CREATE TABLE coachs (
     birth_date date NOT NULL,
     status COACHS_STATUS NOT NULL,
     created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 CREATE TRIGGER update_coachs_at BEFORE UPDATE ON coachs FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -123,8 +123,8 @@ CREATE TABLE equipment (
     status EQUIPMENT_STATUS NOT NULL,
     info varchar(255) NOT NULL,
     store_id uuid NOT NULL,
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 CREATE TRIGGER update_equipment_at BEFORE UPDATE ON equipment FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -140,8 +140,8 @@ CREATE TABLE fitness_classes (
     end_time date NOT NULL,
     period_max int2 NOT NULL,
     introduce varchar,
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 CREATE TRIGGER update_fitness_classes_at BEFORE UPDATE ON fitness_classes FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -154,8 +154,8 @@ CREATE TABLE schedule (
     time_start date NOT NULL,
     time_end date NOT NULL,
     status SCHEDELES_STATUS NOT NULL,
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (class_id, user_id)
 );
 CREATE TRIGGER update_schedule_at BEFORE UPDATE ON schedule FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -181,8 +181,8 @@ CREATE TABLE staffs (
     department varchar(128) NOT NULL,
     position varchar(128) NOT NULL,
     status STAFFS_STATUS NOT NULL,
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 CREATE TRIGGER update_staffs_at BEFORE UPDATE ON staffs FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -197,8 +197,8 @@ CREATE TABLE stores (
     status char NOT NULL,
     contact varchar(255) NOT NULL,
     homepage varchar(255) NOT NULL,
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 CREATE TRIGGER update_stores_at BEFORE UPDATE ON stores FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -208,8 +208,8 @@ CREATE TABLE access_tokens (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   access_token varchar(512) NOT NULL,
-  create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 CREATE TRIGGER update_access_tokens_at BEFORE UPDATE ON access_tokens FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -219,8 +219,8 @@ CREATE TABLE verify_codes (
   user_id uuid NOT NULL,
   verify_code varchar(6) NOT NULL,
   is_valid bool NOT NULL DEFAULT True,
-  create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 CREATE TRIGGER update_verify_codes_at BEFORE UPDATE ON verify_codes FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -247,8 +247,8 @@ CREATE TABLE user_infos (
     card_exp varchar(5) NOT NULL,
     card_security_code varchar(255) NOT NULL,
     subscription bool NOT NULL DEFAULT 'true',
-    create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id)
 );
 CREATE TRIGGER update_user_info_at BEFORE UPDATE ON user_infos FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
@@ -260,7 +260,7 @@ CREATE TABLE users (
     hashed_pwd varchar(255),
     status USERS_STATUS NOT NULL,
     created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 CREATE TRIGGER update_users_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE  updated_at_column();
