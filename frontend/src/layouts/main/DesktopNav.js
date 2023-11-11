@@ -2,7 +2,7 @@ import { Stack, ListItemButton } from "@mui/material";
 import { useLocation, matchPath, useNavigate } from "react-router-dom";
 // @mui
 import { styled } from "@mui/material/styles";
-import navConfig from "./navConfig";
+import navConfig from "src/layouts/main/navConfig";
 
 // ----------------------------------------------------------------------
 

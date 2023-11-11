@@ -5,5 +5,9 @@ export const Paths = {
     forgot_password: "/forgot-password",
     verify_email: "/verify-email",
     home_page: "/home",
-    not_found:"/404"
+    not_found:"/404",
+    about:"/about",
+    class:"/class",
+    store:"/store",
+    price:"/price"
 };

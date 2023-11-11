@@ -2,14 +2,20 @@
 import { Navigate, useRoutes } from "react-router-dom";
 // Layout
 import AuthClassicLayout from "src/layouts/auth";
-import MainLayout from "src/layouts/main_";
+import MainLayout from "src/layouts/main";
 // .
 import { Paths } from "src/routers/paths";
-import { HomePage, Login, NotFound } from "src/routers/elements";
+import { HomePage } from "src/routers/elements";
 import { Register } from "src/routers/elements";
 import { NewPassword } from "src/routers/elements";
 import { ForgotPassword } from "src/routers/elements";
 import { VerifyEmail } from "src/routers/elements";
+import { Login } from "src/routers/elements";
+import { NotFound } from "src/routers/elements";
+import { About } from "src/routers/elements";
+import { Class } from "src/routers/elements";
+import { Price } from "src/routers/elements";
+import { Store } from "src/routers/elements";
 
 export default function Router() {
   return useRoutes([
@@ -58,6 +64,38 @@ export default function Router() {
       element: (
         <MainLayout>
           <HomePage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: Paths.about,
+      element: (
+        <MainLayout>
+          <About />
+        </MainLayout>
+      ),
+    },
+    {
+      path: Paths.class,
+      element: (
+        <MainLayout>
+          <Class />
+        </MainLayout>
+      ),
+    },
+    {
+      path: Paths.store,
+      element: (
+        <MainLayout>
+          <Store />
+        </MainLayout>
+      ),
+    },
+    {
+      path: Paths.price,
+      element: (
+        <MainLayout>
+          <Price />
         </MainLayout>
       ),
     },

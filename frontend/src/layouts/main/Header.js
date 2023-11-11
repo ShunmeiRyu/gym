@@ -1,18 +1,20 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 // @mui
 import { useTheme } from "@mui/material/styles";
-import { Box, Button, AppBar, Toolbar, Container, Link } from "@mui/material";
+import { Box, Button, AppBar, Toolbar, Container } from "@mui/material";
 // hooks
 import { useResponsive } from "src/hooks/use-responsive";
 // components
 import logo_dark from "src/assets/gym-logos_black.png";
 
 import NavDesktop from "./DesktopNav";
+import { Paths } from "src/routers/paths";
 // ----------------------------------------------------------------------
 
 export default function Header() {
   const carouselRef = useRef(null);
-
+  const navigate = useNavigate();
   const theme = useTheme();
 
   const isDesktop = useResponsive("up", "md");
@@ -42,10 +44,16 @@ export default function Header() {
 
           {isDesktop && <NavDesktop />}
 
-          <Button variant="outlined" sx={{ marginRight: 1 }}>
+          <Button
+            variant="outlined"
+            sx={{ marginRight: 1 }}
+            onClick={() => navigate(Paths.login)}
+          >
             login
           </Button>
-          <Button variant="contained">register</Button>
+          <Button variant="contained" onClick={() => navigate(Paths.register)}>
+            register
+          </Button>
         </Container>
       </Toolbar>
     </AppBar>
