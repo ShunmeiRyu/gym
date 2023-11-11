@@ -3,5 +3,7 @@ export const Paths = {
     register:"/register",
     new_password: "/new-password",
     forgot_password: "/forgot-password",
-    verify_email: "/verify-email"
+    verify_email: "/verify-email",
+    home_page: "/home",
+    not_found:"/404"
 };
