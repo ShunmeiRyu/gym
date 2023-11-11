@@ -18,7 +18,7 @@ import FormProvider, { RHFTextField } from "src/components/hook-form";
 import { Paths } from "src/routers/paths";
 // api
 import { ApiEndpoint } from "src/api/api-endpoint";
-import { post } from "src/api/http";
+import axiosHttp from "src/api/http";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -42,13 +42,13 @@ export default function ForgotPassword() {
   } = methods;
 
   const onSubmit = async (form_data) => {
-    const [status, data] = await post(ApiEndpoint.forgot_password, {
-      email: form_data.email
+    const [status, data] = await axiosHttp.post(ApiEndpoint.forgot_password, {
+      email: form_data.email,
     });
     if (status === 200) {
       navigate(`${Paths.new_password}?email=${form_data.email}`);
     } else {
-      console.log(data)
+      console.log(data);
       setErrorMsg(data.message);
     }
   };

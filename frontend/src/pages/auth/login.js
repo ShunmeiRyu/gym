@@ -24,8 +24,7 @@ import { useBoolean } from "src/hooks/use-boolean";
 import { Paths } from "src/routers/paths";
 // api
 import { ApiEndpoint } from "src/api/api-endpoint";
-import { post } from "src/api/http";
-
+import axiosHttp from "src/api/http";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -53,12 +52,26 @@ export default function Login() {
   } = methods;
 
   const onSubmit = async (form_data) => {
-    const [status, data] = await post(ApiEndpoint.token, {
+    const [status, data] = await axiosHttp.post(ApiEndpoint.token, {
       email: form_data.email,
       password: form_data.password,
     });
     if (status === 200) {
       navigate("/");
+      axiosHttp.interceptors.request.use(
+        (config) => {
+          config.data = JSON.stringify(config.data);
+          const access_token = localStorage.getItem("access_token", undefined);
+          config.headers = {
+            "Content-Type": "application/json",
+            Authentication: access_token === undefined ? null : access_token,
+          };
+          return config;
+        },
+        (error) => {
+          return error;
+        }
+      );
     } else {
       setErrorMsg(data.message);
     }
@@ -67,7 +80,7 @@ export default function Login() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2} sx={{ mb: 5 }}>
-        <Typography variant="h4">Sign in to GYM</Typography>
+        <Typography variant="h4">Welcome to GYM</Typography>
 
         <Stack direction="row" spacing={0.5}>
           <Typography variant="body2">New user?</Typography>

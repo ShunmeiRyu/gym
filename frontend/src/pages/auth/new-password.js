@@ -24,7 +24,7 @@ import { useCountdownSeconds } from "src/hooks/use-countdown";
 import { Paths } from "src/routers/paths";
 // api
 import { ApiEndpoint } from "src/api/api-endpoint";
-import { post } from "src/api/http";
+import axiosHttp from "src/api/http";
 
 export default function NewPassword() {
   const [params] = useSearchParams();
@@ -56,7 +56,7 @@ export default function NewPassword() {
   } = methods;
 
   const onSubmit = async (form_data) => {
-    const [status, data] = await post(ApiEndpoint.password_verify_email, {
+    const [status, data] = await axiosHttp.post(ApiEndpoint.password_verify_email, {
       email: params.get("email"),
       code: form_data.code,
       password: form_data.password,
@@ -68,7 +68,7 @@ export default function NewPassword() {
     }
   };
   const handleResendCode = async (form_data) => {
-    const [status, data] = await post(ApiEndpoint.forgot_password, {
+    const [status, data] = await axiosHttp.post(ApiEndpoint.forgot_password, {
       email: params.get("email"),
     });
     if (status === 200) {

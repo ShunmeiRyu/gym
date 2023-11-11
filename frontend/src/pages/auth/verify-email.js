@@ -22,7 +22,7 @@ import { useCountdownSeconds } from "src/hooks/use-countdown";
 import { Paths } from "src/routers/paths";
 // api
 import { ApiEndpoint } from "src/api/api-endpoint";
-import { post } from "src/api/http";
+import axiosHttp from "src/api/http";
 
 export default function VerifyEmail() {
   const [params] = useSearchParams();
@@ -48,7 +48,7 @@ export default function VerifyEmail() {
   } = methods;
 
   const onSubmit = async (form_data) => {
-    const [status, data] = await post(ApiEndpoint.verify_email, {
+    const [status, data] = await axiosHttp.post(ApiEndpoint.verify_email, {
       email: params.get("email"),
       code: form_data.code,
     });
@@ -59,11 +59,14 @@ export default function VerifyEmail() {
     }
   };
   const handleResendCode = async (form_data) => {
-    const [status, data] = await post(ApiEndpoint.register_resend_code, {
-      email: params.get("email"),
-    });
+    const [status, data] = await axiosHttp.post(
+      ApiEndpoint.register_resend_code,
+      {
+        email: params.get("email"),
+      }
+    );
     if (status === 200) {
-      console.log(111,form_data)
+      console.log(111, form_data);
       navigate(`${Paths.verify_email}?email=${params.get("email")}`);
     } else {
       setErrorMsg(data.message);
